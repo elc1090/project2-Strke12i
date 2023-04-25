@@ -107,8 +107,8 @@ export default {
             console.log(this.$refs.child.searchTerm);
         },
         async buscarRecomendacoes() {
-            const clientId = "deb03ded83ef4467987660b18b91636f"//process.env.CLIENT_ID
-            const clientSecret = "f2b95f11831240c1bd3ac6560bd0c7c2"//process.env.CLIENT_SECRET;
+            const clientId =process.env.CLIENT_ID
+            const clientSecret = Sprocess.env.CLIENT_SECRET;
 
             const getToken = async () => {
                 const response = await fetch('https://accounts.spotify.com/api/token', {
