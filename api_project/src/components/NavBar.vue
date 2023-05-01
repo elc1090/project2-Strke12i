@@ -1,4 +1,3 @@
-
 <template>
     <nav class=" bg-white w-full flex justify-between items-center px-8 h-30 mt-2">
         <div class="inline-flex">
@@ -19,9 +18,9 @@
             <div class="mt-2 px-3">
                 <div class="inline-block">
                     <div class="inline-flex items-center max-w-full">
-                        <InputSearch ref="child" />
+                        <InputSearch @search-input="updateInputText" />
                         <div class="ml-2 flex items-center pr-2">
-                            <button class="hover:bg-gray-200 rounded-full" @click="buscarRecomendacoes">
+                            <button class="hover:bg-gray-200 rounded-full" @click="handleClick">
                                 <span class="material-icons">search</span>
                             </button>
 
@@ -30,9 +29,6 @@
                 </div>
             </div>
         </div>
-
-
-
         <div class="flex-initial">
             <div class="flex justify-end items-center relative">
 
@@ -94,56 +90,25 @@
   
 <script>
 import InputSearch from './InputSearch.vue';
-import axios from "axios"
-import { Buffer } from 'buffer'
+var localStorage = window.localStorage
 export default {
     name: 'Navbar',
     components: {
         InputSearch,
-
+    },
+    props:["findArtist"],
+    data() {
+        return {
+            inputText: '',
+        }
     },
     methods: {
-        printSearch() {
-            console.log(this.$refs.child.searchTerm);
+        handleClick(){
+            this.findArtist()
         },
-        async buscarRecomendacoes() {
-            const clientId =process.env.CLIENT_ID
-            const clientSecret = Sprocess.env.CLIENT_SECRET;
-
-            const getToken = async () => {
-                const response = await fetch('https://accounts.spotify.com/api/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Authorization': `Basic ${btoa(`${clientId}:${clientSecret}`)}`
-                    },
-                    body: 'grant_type=client_credentials'
-                });
-
-                const data = await response.json();
-                return data.access_token;
-            }
-
-            // função para obter artistas relacionados com base no ID do artista fornecido pelo usuário
-            const getArtist = async (token) => {
-                const response = await fetch(`https://api.spotify.com/v1/search?type=artist&q=${this.$refs.child.searchTerm}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                        "Accept"        : "application/json",
-                    }
-                });
-
-                const data = await response.json();
-                return data.artists.items[0];
-            };
-
-
-            const accessToken = await getToken();
-            const recomendacoes = await getArtist(accessToken);
-            console.log(recomendacoes);
-        }
+        updateInputText(value) {
+            this.$emit("inputValue",value)
+        },
     }
 }
 </script>

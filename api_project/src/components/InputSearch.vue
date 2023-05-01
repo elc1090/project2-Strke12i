@@ -4,29 +4,22 @@
         type="text"
         class="h-10 pl-2 pr-5 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
         placeholder="Busca sua banda aqui..."
-        v-model="searchTerm"
-        @input="updateSearchTerm"
+        v-model="inputValue" 
+        @input="emitSearchInput"
       />
     </div>
   </template>
   
   <script>
 export default {
-  props: {
-    value: {
-      type: String,
-      default: "",
-    },
-  },
   data() {
     return {
-      searchTerm: this.value,
+      inputValue: ''
     };
   },
   methods: {
-    updateSearchTerm(event) {
-      this.searchTerm = event.target.value;
-      this.$emit("input", this.searchTerm);
+    emitSearchInput() {
+      this.$emit('search-input', this.inputValue)
     },
   },
 };
